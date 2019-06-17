@@ -25,7 +25,10 @@ var HelloModel = widgets.DOMWidgetModel.extend({
         _view_module: 'jupyter-widget-example',
         _model_module_version: '0.1.0',
         _view_module_version: '0.1.0',
-        value: 'Hello World!'
+        
+        width: '200',
+        height: '200',
+        color: 'blue'
     })
 });
 
@@ -46,14 +49,14 @@ var HelloView = widgets.DOMWidgetView.extend({
         divWidget.appendChild(divY);
         divNew.id = 'canvas';
         divNew.innerHTML = htmlContent
-        divNew.style.width = "300px"
-        divNew.style.height = "300px"
+        divNew.style.width = this.model.get('width') + "px"
+        divNew.style.height = this.model.get('height') + "px"
         divNew.style.border = "solid"
         divNew.addEventListener('click', () => {
             var rect = canvas.getBoundingClientRect();
             var x = getMousePos(canvas, event)["x"];     // Get the horizontal coordinate
             var y = getMousePos(canvas, event)["y"];
-            drawCoordinates(x, y, "red")
+            drawCoordinates(x, y, this.model.get('color'))
             divX.textContent = `X position is: ${x}`
             divY.textContent = `Y position is: ${y}`
         });
