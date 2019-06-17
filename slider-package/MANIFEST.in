@@ -1,0 +1,2 @@
+recursive-include slider_package/static *.*
+include slider-package.json
