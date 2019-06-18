@@ -18,11 +18,11 @@ var _ = require('lodash');
 // When serialiazing the entire widget state for embedding, only values that
 // differ from the defaults will be specified.
 var HelloModel = widgets.DOMWidgetModel.extend({
-    defaults: _.extend(widgets.DOMWidgetModel.prototype.defaults(), {
+    defaults: _.extend(_.result(this, 'widgets.DOMWidgetModel.prototype.defaults'), {
         _model_name: 'HelloModel',
         _view_name: 'HelloView',
-        _model_module: 'jupyter-widget-example',
-        _view_module: 'jupyter-widget-example',
+        _model_module: 'slider-package',
+        _view_module: 'slider-package',
         _model_module_version: '0.1.0',
         _view_module_version: '0.1.0',
         
@@ -37,21 +37,21 @@ var HelloModel = widgets.DOMWidgetModel.extend({
 var HelloView = widgets.DOMWidgetView.extend({
     render: function () {
         //this.el.createElement("div");
-        var htmlContent = `<div id="markerbounds" style="margin: auto;position: relative;"> <div id="box" style="margin: auto;background-color: lightsteelblue;position: absolute;"> <div id="marker" style="position: relative;background-color: brown;border-radius: 100px;"></div> </div> </div> <div> <p id="coord" style="font-family: serif;font-size: 14px;margin: 0px;"></p> </div>`
         const divWidget = this.el;
         const divNew = document.createElement('canvas');
         const divX = document.createElement('div');
         const divY = document.createElement('div');
         divX.textContent = 0
         divX.textContent = 0
-        divWidget.appendChild(divNew);
-        divWidget.appendChild(divX);
-        divWidget.appendChild(divY);
+        
         divNew.id = 'canvas';
-        divNew.innerHTML = htmlContent
-        divNew.style.width = this.model.get('width') + "px"
-        divNew.style.height = this.model.get('height') + "px"
-        divNew.style.border = "solid"
+        const w=this.model.get('width') + "px"
+        const h=this.model.get('height') + "px"
+        divNew.style.width = w;
+        divNew.style.height = h;
+        console.log(w);
+        console.log(h);
+        divNew.style.border = "solid";
         divNew.addEventListener('click', () => {
             var rect = canvas.getBoundingClientRect();
             var x = getMousePos(canvas, event)["x"];     // Get the horizontal coordinate
@@ -60,6 +60,9 @@ var HelloView = widgets.DOMWidgetView.extend({
             divX.textContent = `X position is: ${x}`
             divY.textContent = `Y position is: ${y}`
         });
+        divWidget.appendChild(divNew);
+        divWidget.appendChild(divX);
+        divWidget.appendChild(divY);
         function getMousePos(canvas, evt) {
             var rect = canvas.getBoundingClientRect(), // abs. size of element
                 scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for X
@@ -81,9 +84,10 @@ var HelloView = widgets.DOMWidgetView.extend({
             ctx.arc(x, y, pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
             ctx.fill(); // Close the path and fill.
         }
-        console.log(this.el)
+        
 
     },
+    
 
 });
 
